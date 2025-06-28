@@ -14,7 +14,7 @@ kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
     
@@ -31,27 +31,37 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.material)
+            implementation(libs.androidx.compose.materialWindow)
             implementation(libs.androidx.activity.compose)
             implementation(libs.compose.ui.tooling)
             implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.compose.ui.foundation)
             implementation(libs.navigation.compose)
+            implementation(libs.androidx.lifecycle.runtime.ktx)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
+            implementation(libs.decompose)
+            implementation(libs.decompose.ext.android)
+            implementation(libs.decompose.ext.compose)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
+//            implementation(libs.decompose.jetbrains)
             implementation(libs.koin.androidx.compose)
             implementation(libs.logging.napier)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
+            implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.decompose)
+            implementation(libs.coil.compose)
+            implementation(libs.logging.napier)
+//            implementation(libs.decompose.jetbrains)
             implementation(projects.shared)
-            implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization.json)
         }
         desktopMain.dependencies {
@@ -82,8 +92,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 

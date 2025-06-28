@@ -12,6 +12,10 @@ import org.example.kmpskeleton.domain.util.AppConstant
 class CharacterApiImpl (
     private val httpClient: HttpClient
 ): ICharacterApi{
+    override suspend fun getCharacter(page: Int): NetworkResponse<CharacterResponse> =
+        getSafeNetworkResponse {
+            httpClient.get("${AppConstant.GET_CHARACTER}?page=$page").body()
+        }
 
     override suspend fun getCharacterById(id: Int): NetworkResponse<CharacterEntity> =
         getSafeNetworkResponse {

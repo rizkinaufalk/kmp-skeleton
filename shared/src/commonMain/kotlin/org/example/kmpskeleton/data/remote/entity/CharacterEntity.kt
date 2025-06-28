@@ -9,6 +9,7 @@ data class CharacterEntity(
 	val name: String? = null,
 	val id: Int? = null,
 	val type: String? = null,
-	val status: String? = null
+	val status: String? = null,
+	val image: String? = null,
 )
 
