@@ -2,6 +2,7 @@ package org.example.kmpskeleton
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +38,13 @@ class MainActivity : ComponentActivity() {
                         componentContext = DefaultComponentContext(lifecycle = lifecycle)
                 )
             }
+
+            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    rootComponent.onBack()
+                }
+            })
+
 
             // Shared toolbar config state
             val toolbarConfig = remember { mutableStateOf(ToolbarConfig()) }
