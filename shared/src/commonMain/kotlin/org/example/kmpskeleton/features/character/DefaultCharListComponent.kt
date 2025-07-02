@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.example.kmpskeleton.RickAppDB
 import org.example.kmpskeleton.data.remote.entity.CharacterEntity
 import org.example.kmpskeleton.domain.subscribers.Resource
 import org.example.kmpskeleton.domain.usecase.GetCharacterUseCase
@@ -14,7 +15,7 @@ import org.example.kmpskeleton.domain.usecase.GetCharacterUseCase
 class DefaultCharListComponent(
     componentContext: ComponentContext,
     private val getCharacterUseCase: GetCharacterUseCase,
-    private val charClicked: (CharacterEntity) -> Unit
+    private val charClicked: (CharacterEntity) -> Unit,
 ) : CharListComponent, ComponentContext by componentContext{
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)

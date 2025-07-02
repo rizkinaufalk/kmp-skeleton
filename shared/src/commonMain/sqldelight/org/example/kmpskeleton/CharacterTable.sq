@@ -1,0 +1,20 @@
+CREATE TABLE Character (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    imageUrl TEXT NOT NULL
+);
+
+getAllFavourite:
+SELECT * FROM Character;
+
+insertCharacter:
+INSERT OR REPLACE INTO Character (id, name, imageUrl)
+VALUES (?, ?, ?);
+
+isCharacterExists:
+SELECT EXISTS(
+    SELECT 1 FROM Character WHERE id = ?
+) AS isExists;
+
+removeCharacter:
+DELETE FROM Character WHERE id = ?;

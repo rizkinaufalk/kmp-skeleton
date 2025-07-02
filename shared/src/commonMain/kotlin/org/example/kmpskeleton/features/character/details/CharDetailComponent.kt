@@ -5,6 +5,6 @@ import org.example.kmpskeleton.data.remote.entity.CharacterEntity
 
 interface CharDetailComponent {
     val uiState: Value<CharDetailUIState>
-
+    fun onToggleFavorite()
     fun onBackPressed()
 }

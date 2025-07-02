@@ -1,6 +1,7 @@
 package org.example.kmpskeleton
 
 import android.app.Application
+import org.example.kmpskeleton.di.androidModule
 import org.example.kmpskeleton.di.initKoin
 import org.example.kmpskeleton.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -12,7 +13,7 @@ class RickApplication: Application() {
         initKoin {
             androidLogger()
             androidContext(this@RickApplication)
-            modules(viewModelModule)
+            modules(viewModelModule, androidModule(applicationContext))
         }
     }
 }

@@ -1,12 +1,19 @@
 package org.example.kmpskeleton.ui.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import org.example.kmpskeleton.navigation.RootComponent
 import org.example.kmpskeleton.ui.screen.character.CharacterListScreen
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.example.kmpskeleton.ui.components.toolbar.ToolbarConfig
 import org.example.kmpskeleton.ui.screen.character.detail.CharacterDetailScreen
 
@@ -33,10 +40,19 @@ fun RootContent(
                 CharacterListScreen(child.component)
             }
             is RootComponent.Child.CharDetail -> {
+                val state by child.component.uiState.subscribeAsState()
                 updateToolbar(
                     ToolbarConfig(
                         title = "Character Detail",
-                        showBack = true
+                        showBack = true,
+                        actions = {
+                            IconButton(onClick = { child.component.onToggleFavorite() }) {
+                                Icon(
+                                    imageVector = if (state.isFavorited) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                    contentDescription = "Favorite"
+                                )
+                            }
+                        }
                     )
                 )
                 CharacterDetailScreen(child.component)

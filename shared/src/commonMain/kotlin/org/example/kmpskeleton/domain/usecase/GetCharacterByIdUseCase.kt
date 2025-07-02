@@ -11,7 +11,7 @@ class GetCharacterByIdUseCase(
     private val characterRepo: ICharacterRepo
 ) {
 
-    suspend fun invoke(params: Int): Flow<Resource<CharacterEntity?>> {
+    suspend operator fun invoke(params: Int): Flow<Resource<CharacterEntity?>> {
         return characterRepo.getCharacterById(params)
     }
 

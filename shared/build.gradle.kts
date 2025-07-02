@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.kmpNativeCoroutines)
+    id("app.cash.sqldelight") version "2.1.0"
 }
 
 kotlin {
@@ -36,6 +37,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.decompose.ext.android)
             implementation(libs.decompose.ext.compose)
+            implementation(libs.sqldelight.android)
 //            implementation(libs.decompose.jetbrains)
         }
 
@@ -50,11 +52,27 @@ kotlin {
             implementation(libs.logging.napier)
             implementation(libs.decompose)
             implementation(libs.decompose.ext.compose)
+            implementation(libs.sqldelight.coroutines)
+//            implementation(libs.sqldelight.runtime)
 //            implementation(libs.decompose.coroutine)
         }
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.sqldelight.native)
+        }
+
+        jvmMain.dependencies {
+            implementation(libs.sqldelight.jvm)
+        }
+    }
+
+    sqldelight {
+        databases {
+            create("RickAppDB") {
+                packageName.set("org.example.kmpskeleton")
+                verifyMigrations = false
+            }
         }
     }
 }

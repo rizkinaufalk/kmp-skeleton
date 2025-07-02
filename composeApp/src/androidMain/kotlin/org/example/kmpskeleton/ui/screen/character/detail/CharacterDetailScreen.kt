@@ -37,10 +37,6 @@ import org.koin.compose.viewmodel.koinViewModel
     ) {
         val uiState by component.uiState.subscribeAsState()
 
-    //    LaunchedEffect(Unit) {
-    //        viewModel.getCharacterById(2)
-    //    }
-
         Surface(
             modifier = modifier
                 .fillMaxSize()

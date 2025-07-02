@@ -8,6 +8,9 @@ import org.example.kmpskeleton.domain.subscribers.Resource
 
 interface ICharacterRepo{
     fun getCharacter(page: Int): Flow<Resource<CharacterPage>>
-
     suspend fun getCharacterById(id: Int): Flow<Resource<CharacterEntity?>>
+    suspend fun insertCharacter(character: CharacterEntity)
+    suspend fun removeCharacter(id: Int)
+    fun getAllFavCharacter(): Flow<List<CharacterEntity>>
+    suspend fun isCharacterExist(id: Int): Boolean
 }

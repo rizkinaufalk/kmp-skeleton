@@ -11,5 +11,6 @@ data class CharacterEntity(
 	val type: String? = null,
 	val status: String? = null,
 	val image: String? = null,
+	val isFavourite: Boolean? = false,
 )
 
