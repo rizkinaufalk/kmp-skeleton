@@ -8,13 +8,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import org.example.kmpskeleton.navigation.RootComponent
-import org.example.kmpskeleton.ui.screen.character.CharacterListScreen
+import androidx.compose.ui.graphics.Color
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import org.example.kmpskeleton.navigation.RootComponent
 import org.example.kmpskeleton.ui.components.toolbar.ToolbarConfig
+import org.example.kmpskeleton.ui.screen.character.CharacterListScreen
 import org.example.kmpskeleton.ui.screen.character.detail.CharacterDetailScreen
 
 @Composable
@@ -39,6 +40,7 @@ fun RootContent(
                 )
                 CharacterListScreen(child.component)
             }
+
             is RootComponent.Child.CharDetail -> {
                 val state by child.component.uiState.subscribeAsState()
                 updateToolbar(
@@ -47,10 +49,18 @@ fun RootContent(
                         showBack = true,
                         actions = {
                             IconButton(onClick = { child.component.onToggleFavorite() }) {
-                                Icon(
-                                    imageVector = if (state.isFavorited) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                    contentDescription = "Favorite"
-                                )
+                                if (state.isFavorited) {
+                                    Icon(
+                                        imageVector = Icons.Default.Favorite,
+                                        contentDescription = "Favorite",
+                                        tint = Color.Red
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Default.FavoriteBorder,
+                                        contentDescription = "Favorite"
+                                    )
+                                }
                             }
                         }
                     )

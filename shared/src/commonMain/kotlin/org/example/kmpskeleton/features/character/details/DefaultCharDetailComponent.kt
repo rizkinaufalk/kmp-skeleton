@@ -23,6 +23,13 @@ class DefaultCharDetailComponent(
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
+    init {
+        scope.launch {
+            val isFav = isFavCharacterUseCase(character.id ?: 0)
+            _uiState.value = _uiState.value.copy(isFavorited = isFav)
+        }
+    }
+
     private val _uiState = MutableValue(
         CharDetailUIState(
             isLoading = false,
