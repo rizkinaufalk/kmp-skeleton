@@ -37,7 +37,6 @@ open class CharacterDetailsViewModel: ViewModel(), KoinComponent { // later try 
                         _uiState.value = UiState.Error(resource.failureData.message)
                     }
                     Resource.Loading -> TODO()
-                    Resource.None -> TODO()
                 }
 
             }

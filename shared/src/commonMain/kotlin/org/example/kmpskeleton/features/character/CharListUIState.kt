@@ -7,5 +7,6 @@ data class CharListUIState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val currentPage: Int = 1,
-    val endReached: Boolean = false
+    val endReached: Boolean = false,
+    val isRefreshing: Boolean = false
 )

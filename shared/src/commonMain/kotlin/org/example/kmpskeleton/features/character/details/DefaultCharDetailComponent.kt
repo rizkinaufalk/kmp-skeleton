@@ -8,8 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.example.kmpskeleton.data.remote.entity.CharacterEntity
-import org.example.kmpskeleton.data.repositories.CharacterRepoImpl
-import org.example.kmpskeleton.domain.usecase.InsertFavoriteUseCase
 import org.example.kmpskeleton.domain.usecase.IsFavCharacterUseCase
 import org.example.kmpskeleton.domain.usecase.ToggleFavCharacterUseCase
 

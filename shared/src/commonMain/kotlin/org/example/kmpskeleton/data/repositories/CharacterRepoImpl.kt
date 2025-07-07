@@ -1,7 +1,11 @@
 package org.example.kmpskeleton.data.repositories
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import org.example.kmpskeleton.data.remote.entity.CharacterEntity
 import org.example.kmpskeleton.domain.CharacterPage
 import org.example.kmpskeleton.domain.NetworkResponse
@@ -36,12 +40,20 @@ class CharacterRepoImpl(
         dataSources.insertCharacter(
             id = character.id ?: 0,
             name = character.name.orEmpty(),
-            imageUrl = character.name.orEmpty()
+            imageUrl = character.image.orEmpty(),
+            status = character.status.orEmpty(),
+            gender = character.gender.orEmpty(),
+            species = character.species.orEmpty()
         )
     }
 
-    override fun getAllFavCharacter(): Flow<List<CharacterEntity>> = flow{
-        dataSources.getAllFavCharacter()
+    override fun getAllFavCharacter(): Flow<Resource<List<CharacterEntity>>> {
+        return dataSources.getAllFavCharacter()
+            .map { Resource.Success(it, DataSource.LOCAL) as Resource<List<CharacterEntity>> }
+            .onStart { emit(Resource.Loading) }
+            .catch { e ->
+                emit(Resource.Failure(FailureData(code = -1, message = e.message ?: "Unknown DB error")))
+            }
     }
 
     override suspend fun isCharacterExist(id: Int): Boolean {
@@ -50,5 +62,9 @@ class CharacterRepoImpl(
 
     override suspend fun removeCharacter(id: Int) {
         dataSources.removeCharacter(id)
+    }
+
+    override suspend fun deleteAllFavCharacter() {
+        dataSources.deleteAllFavCharacter()
     }
 }

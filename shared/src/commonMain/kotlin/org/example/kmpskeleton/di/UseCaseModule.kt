@@ -1,5 +1,6 @@
 package org.example.kmpskeleton.di
 
+import org.example.kmpskeleton.domain.usecase.DeleteAllFavCharacterUseCase
 import org.example.kmpskeleton.domain.usecase.GetAllFavCharacterUseCase
 import org.example.kmpskeleton.domain.usecase.GetCharacterByIdUseCase
 import org.example.kmpskeleton.domain.usecase.GetCharacterUseCase
@@ -19,5 +20,6 @@ val provideUseCaseModule = module {
     single { ToggleFavCharacterUseCase(characterRepo = get()) }
     single { IsFavCharacterUseCase(characterRepo = get()) }
     single { RemoveFavCharacterUseCase(characterRepo = get()) }
+    single { DeleteAllFavCharacterUseCase(characterRepo = get()) }
     single<ScreenComponentFactory> { ScreenComponentFactoryImpl() }
 }

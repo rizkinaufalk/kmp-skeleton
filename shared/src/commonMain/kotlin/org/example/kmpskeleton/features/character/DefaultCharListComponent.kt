@@ -3,6 +3,7 @@ package org.example.kmpskeleton.features.character
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -28,14 +29,15 @@ class DefaultCharListComponent(
     private var endReached = false
 
     init {
-        loadCharacters()
+        if (_uiState.value.characters.isEmpty()){
+            loadCharacters()
+        }
     }
 
-    private fun loadCharacters(page: Int = 1) {
+    private fun loadCharacters(page: Int = currentPage) {
         if (isLoading || endReached) return
 
         isLoading = true
-        _uiState.value = _uiState.value.copy(isLoading = true)
 
         scope.launch {
             getCharacterUseCase(page).collect { result ->
@@ -43,12 +45,10 @@ class DefaultCharListComponent(
                     is Resource.Success -> {
                         val newItems = result.data?.characters.orEmpty()
 
-                        // Update endReached flag if no more data
                         if (newItems.isEmpty()) {
                             endReached = true
                         }
 
-                        // Accumulate characters
                         val updatedList = _uiState.value.characters + newItems
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
@@ -57,7 +57,7 @@ class DefaultCharListComponent(
                             currentPage = page
                         )
 
-                        currentPage++ // move to next page
+                        currentPage++
                         isLoading = false
                     }
 
@@ -70,25 +70,54 @@ class DefaultCharListComponent(
                     }
 
                     is Resource.Loading -> {
-                        // Optional: you may keep this if you want fine-grained loading state
-                    }
-
-                    Resource.None -> {
-                        isLoading = false
+                        _uiState.value = _uiState.value.copy(isLoading = true)
                     }
                 }
             }
         }
     }
 
-//    override val model: Value<List<CharacterEntity>> = MutableValue(
-//        data
-//    )
-
     override fun onCharClicked(data: CharacterEntity) = charClicked(data)
 
     override fun nextPage() {
         loadCharacters(currentPage++)
+    }
+
+    override fun onPullRefresh() {
+        scope.launch {
+            _uiState.update { it.copy(isRefreshing = true) }
+            getCharacterUseCase(currentPage).collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        val newItems = result.data?.characters.orEmpty()
+
+                        if (newItems.isEmpty()) {
+                            endReached = true
+                        }
+
+                        val updatedList = _uiState.value.characters + newItems
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            isRefreshing = false,
+                            characters = updatedList,
+                            errorMessage = null,
+                            currentPage = currentPage
+                        )
+                    }
+
+                    is Resource.Failure -> {
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            isRefreshing = false,
+                            errorMessage = result.failureData.message ?: "Unknown error"
+                        )
+                    }
+
+                    else -> {}
+                }
+            }
+
+        }
     }
 }
 

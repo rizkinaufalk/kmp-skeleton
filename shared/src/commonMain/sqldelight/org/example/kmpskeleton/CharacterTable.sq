@@ -1,15 +1,20 @@
 CREATE TABLE Character (
     id INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
-    imageUrl TEXT NOT NULL
+    imageUrl TEXT NOT NULL,
+    status TEXT NOT NULL,
+    species TEXT NOT NULL,
+    gender TEXT NOT NULL
 );
 
 getAllFavourite:
 SELECT * FROM Character;
 
 insertCharacter:
-INSERT OR REPLACE INTO Character (id, name, imageUrl)
-VALUES (?, ?, ?);
+INSERT OR REPLACE INTO Character (
+    id, name, imageUrl, status, species, gender
+)
+VALUES (?, ?, ?, ?, ?, ?);
 
 isCharacterExists:
 SELECT EXISTS(
@@ -18,3 +23,6 @@ SELECT EXISTS(
 
 removeCharacter:
 DELETE FROM Character WHERE id = ?;
+
+deleteAllCharacters:
+DELETE FROM Character;

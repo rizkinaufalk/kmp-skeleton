@@ -17,6 +17,8 @@ import org.example.kmpskeleton.navigation.RootComponent
 import org.example.kmpskeleton.ui.components.toolbar.ToolbarConfig
 import org.example.kmpskeleton.ui.screen.character.CharacterListScreen
 import org.example.kmpskeleton.ui.screen.character.detail.CharacterDetailScreen
+import org.example.kmpskeleton.ui.screen.character.favorites.FavortiesScreen
+import org.example.kmpskeleton.ui.screen.character.settings.SettingsScreen
 
 @Composable
 fun RootContent(
@@ -30,6 +32,7 @@ fun RootContent(
         animation = stackAnimation(slide())
     )
     {
+
         when (val child = it.instance) {
             is RootComponent.Child.CharList -> {
                 updateToolbar(
@@ -66,6 +69,26 @@ fun RootContent(
                     )
                 )
                 CharacterDetailScreen(child.component)
+            }
+
+            is RootComponent.Child.Favorites -> {
+                updateToolbar(
+                    ToolbarConfig(
+                        title = "Favourites",
+                        showBack = false
+                    )
+                )
+                FavortiesScreen(child.component)
+            }
+
+            is RootComponent.Child.Settings -> {
+                updateToolbar(
+                    ToolbarConfig(
+                        title = "Settings",
+                        showBack = false
+                    )
+                )
+                SettingsScreen(child.component)
             }
         }
     }

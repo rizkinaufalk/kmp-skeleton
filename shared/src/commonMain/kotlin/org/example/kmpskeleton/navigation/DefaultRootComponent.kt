@@ -7,6 +7,7 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
 import org.example.kmpskeleton.data.remote.entity.CharacterEntity
@@ -20,12 +21,21 @@ class DefaultRootComponent(
 ) : RootComponent, ComponentContext by componentContext {
 
     private val nav = StackNavigation<Config>()
-//    private val characterDB: RickAppDB = getKoin().get()
-//
-//    private val charDetailFactory: CharDetailComponentFactory = CharDetailComponentFactoryImpl()
 
     private fun navigateToDetail(character: CharacterEntity) {
         nav.push(Config.CharDetail(character))
+    }
+
+    fun navigateToCharList() {
+        nav.replaceAll(Config.CharList)
+    }
+
+    fun navigateToFavorites() {
+        nav.replaceAll(Config.Favorites)
+    }
+
+    fun navigateToSettings() {
+        nav.replaceAll(Config.Settings)
     }
 
     override val routerState: Value<ChildStack<*, RootComponent.Child>> = childStack(
@@ -37,33 +47,6 @@ class DefaultRootComponent(
             screenFactory.create(config, componentContext, onFinished = { nav.pop() }, nav)
         }
     )
-
-//    private fun child(
-//        config: Config,
-//        componentContext: ComponentContext
-//    ): RootComponent.Child = when (config) {
-//        Config.CharList -> {
-//            RootComponent.Child.CharList(
-//                DefaultCharListComponent(
-//                    componentContext = componentContext,
-//                    getCharacterUseCase = getCharacterUseCase,
-//                    characterDB,
-//                    charClicked = { char -> nav.push(Config.CharDetail(char, )) }
-//                )
-//            )
-//        }
-//
-//        is Config.CharDetail -> {
-//            RootComponent.Child.CharDetail(
-//                charDetailFactory.create(
-//                    componentContext = componentContext,
-//                    character = config.char,
-//                    onFinished = { nav.pop() }
-//                )
-//            )
-//        }
-//    }
-
     override fun onBack() {
         nav.pop()
     }
@@ -72,9 +55,15 @@ class DefaultRootComponent(
     sealed interface Config {
 
         @Serializable
-        object CharList : Config
+        data object CharList : Config
 
         @Serializable
         data class CharDetail(val char: CharacterEntity) : Config
+
+        @Serializable
+        data object Favorites : Config
+
+        @Serializable
+        data object Settings : Config
     }
 }

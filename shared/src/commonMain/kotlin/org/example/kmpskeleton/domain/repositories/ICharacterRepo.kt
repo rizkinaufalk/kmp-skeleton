@@ -11,6 +11,7 @@ interface ICharacterRepo{
     suspend fun getCharacterById(id: Int): Flow<Resource<CharacterEntity?>>
     suspend fun insertCharacter(character: CharacterEntity)
     suspend fun removeCharacter(id: Int)
-    fun getAllFavCharacter(): Flow<List<CharacterEntity>>
+    suspend fun deleteAllFavCharacter()
+    fun getAllFavCharacter(): Flow<Resource<List<CharacterEntity>>>
     suspend fun isCharacterExist(id: Int): Boolean
 }

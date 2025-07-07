@@ -9,8 +9,14 @@ interface ICharacterDataSources {
     suspend fun getCharacter(page: Int): NetworkResponse<CharacterResponse>
     suspend fun getCharacterById(id: Int): NetworkResponse<CharacterEntity>
 
-    fun insertCharacter(id: Int, name: String, imageUrl: String)
+    fun insertCharacter(id: Int,
+                        name: String,
+                        imageUrl: String,
+                        status: String,
+                        gender: String,
+                        species: String)
     suspend fun isCharacterExist(id: Int): Boolean
     fun getAllFavCharacter(): Flow<List<CharacterEntity>>
     fun removeCharacter(id: Int)
+    fun deleteAllFavCharacter()
 }
