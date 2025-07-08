@@ -24,7 +24,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import io.github.aakira.napier.Napier
 import org.example.kmpskeleton.features.UiState
-import org.example.kmpskeleton.features.character.details.CharacterDetailsViewModel
 import org.example.kmpskeleton.features.character.details.CharDetailComponent
 import org.example.kmpskeleton.ui.components.CharacterHeader
 import org.example.kmpskeleton.ui.components.RowTitleDesc
