@@ -8,15 +8,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.example.kmpskeleton.RickAppDB
-import org.example.kmpskeleton.data.remote.entity.CharacterEntity
-import org.example.kmpskeleton.domain.subscribers.Resource
-import org.example.kmpskeleton.domain.usecase.GetCharacterUseCase
+import org.example.kmpskeleton.domain.usecase.CharacterUseCases
+import org.example.kmpskeleton.domain.usecase.GetCharacterPageUseCase
+import org.example.kmpskeleton.domain.util.Result
 
 class DefaultCharListComponent(
     componentContext: ComponentContext,
-    private val getCharacterUseCase: GetCharacterUseCase,
-    private val charClicked: (CharacterEntity) -> Unit,
+    private val characterUseCases: CharacterUseCases,
+    private val charClicked: (id: Int) -> Unit,
 ) : CharListComponent, ComponentContext by componentContext{
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -40,10 +39,10 @@ class DefaultCharListComponent(
         isLoading = true
 
         scope.launch {
-            getCharacterUseCase(page).collect { result ->
+            characterUseCases.getCharacterPage(page).collect { result ->
                 when (result) {
-                    is Resource.Success -> {
-                        val newItems = result.data?.characters.orEmpty()
+                    is Result.Success -> {
+                        val newItems = result.data
 
                         if (newItems.isEmpty()) {
                             endReached = true
@@ -61,15 +60,15 @@ class DefaultCharListComponent(
                         isLoading = false
                     }
 
-                    is Resource.Failure -> {
+                    is Result.Error -> {
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
-                            errorMessage = result.failureData.message ?: "Unknown error"
+                            errorMessage = result.error
                         )
                         isLoading = false
                     }
 
-                    is Resource.Loading -> {
+                    is Result.Loading -> {
                         _uiState.value = _uiState.value.copy(isLoading = true)
                     }
                 }
@@ -77,7 +76,7 @@ class DefaultCharListComponent(
         }
     }
 
-    override fun onCharClicked(data: CharacterEntity) = charClicked(data)
+    override fun onCharClicked(id: Int) = charClicked(id)
 
     override fun nextPage() {
         loadCharacters(currentPage++)
@@ -86,10 +85,10 @@ class DefaultCharListComponent(
     override fun onPullRefresh() {
         scope.launch {
             _uiState.update { it.copy(isRefreshing = true) }
-            getCharacterUseCase(currentPage).collect { result ->
+            characterUseCases.getCharacterPage(currentPage).collect { result ->
                 when (result) {
-                    is Resource.Success -> {
-                        val newItems = result.data?.characters.orEmpty()
+                    is Result.Success -> {
+                        val newItems = result.data
 
                         if (newItems.isEmpty()) {
                             endReached = true
@@ -105,11 +104,11 @@ class DefaultCharListComponent(
                         )
                     }
 
-                    is Resource.Failure -> {
+                    is Result.Error -> {
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             isRefreshing = false,
-                            errorMessage = result.failureData.message ?: "Unknown error"
+                            errorMessage = result.error
                         )
                     }
 

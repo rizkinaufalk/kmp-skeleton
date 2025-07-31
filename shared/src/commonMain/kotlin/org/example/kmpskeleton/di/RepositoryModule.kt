@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val provideRepositoryModule = module {
   single<ICharacterRepo>{
-      CharacterRepoImpl(dataSources = get())
+      CharacterRepoImpl(remote = get(), local = get())
   }
 }

@@ -52,7 +52,7 @@ fun RootContent(
                         showBack = true,
                         actions = {
                             IconButton(onClick = { child.component.onToggleFavorite() }) {
-                                if (state.isFavorited) {
+                                if (state.isFavourite) {
                                     Icon(
                                         imageVector = Icons.Default.Favorite,
                                         contentDescription = "Favorite",

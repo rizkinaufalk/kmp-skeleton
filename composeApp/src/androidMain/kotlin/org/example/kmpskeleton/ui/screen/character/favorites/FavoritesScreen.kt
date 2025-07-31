@@ -46,12 +46,12 @@ fun FavortiesScreen(
                         key = { _, item -> item.id ?: item.hashCode() }
                     ) { index, char ->
                         CharListItem(
-                            imageUrl = char.image.orEmpty(),
+                            imageUrl = char.imageUrl.orEmpty(),
                             name = char.name.orEmpty(),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 4.dp)
-                                .clickable { component.onCharClicked(char) }
+                                .clickable { component.onCharClicked(char.id ?: 0) }
                         )
                     }
                 }

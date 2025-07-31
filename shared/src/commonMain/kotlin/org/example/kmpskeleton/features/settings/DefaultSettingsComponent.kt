@@ -9,11 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.example.kmpskeleton.domain.usecase.CharacterUseCases
 import org.example.kmpskeleton.domain.usecase.DeleteAllFavCharacterUseCase
+import org.example.kmpskeleton.domain.util.DataError
 
 class DefaultSettingsComponent(
     componentContext: ComponentContext,
-    private val deleteAllFavCharacterUseCase: DeleteAllFavCharacterUseCase,
+    private val characterUseCases: CharacterUseCases,
 ) : SettingsComponent, ComponentContext by componentContext {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -26,7 +28,7 @@ class DefaultSettingsComponent(
             _uiState.update { it.copy(isDeleting = true) }
 
             runCatching {
-                deleteAllFavCharacterUseCase()
+                characterUseCases.deleteAllFavCharacter()
             }.onSuccess {
                 _uiState.update {
                     it.copy(
@@ -37,7 +39,7 @@ class DefaultSettingsComponent(
                 _uiState.update {
                     it.copy(
                         isDeleting = false,
-                        errorMessage = e.message ?: "Failed to delete favorites"
+                        errorMessage = DataError.Local.FILE_NOT_FOUND
                     )
                 }
             }

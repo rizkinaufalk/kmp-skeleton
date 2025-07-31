@@ -43,7 +43,7 @@ import org.koin.compose.viewmodel.koinViewModel
         ) {
             Column {
                 CharacterHeader(
-                    imageUrl = uiState.character?.image.orEmpty(),
+                    imageUrl = uiState.character?.imageUrl.orEmpty(),
                     name = uiState.character?.name.orEmpty()
                 )
 

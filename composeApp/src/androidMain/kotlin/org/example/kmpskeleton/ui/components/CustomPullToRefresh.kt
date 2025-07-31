@@ -17,7 +17,6 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.example.kmpskeleton.data.remote.entity.CharacterEntity
 
 
 @Composable

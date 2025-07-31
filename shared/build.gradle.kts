@@ -47,6 +47,7 @@ kotlin {
             implementation(libs.ktor.auth)
             implementation(libs.ktor.serialization.json)
             implementation(libs.ktor.logging)
+            implementation(libs.ktor.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
             implementation(libs.logging.napier)

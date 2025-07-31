@@ -10,7 +10,7 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
-import org.example.kmpskeleton.data.remote.entity.CharacterEntity
+import org.example.kmpskeleton.data.datasources.local.entity.CharacterEntity
 import org.koin.mp.KoinPlatform.getKoin
 
 
@@ -22,8 +22,8 @@ class DefaultRootComponent(
 
     private val nav = StackNavigation<Config>()
 
-    private fun navigateToDetail(character: CharacterEntity) {
-        nav.push(Config.CharDetail(character))
+    private fun navigateToDetail(characterId: Int) {
+        nav.push(Config.CharDetail(characterId))
     }
 
     fun navigateToCharList() {
@@ -58,7 +58,7 @@ class DefaultRootComponent(
         data object CharList : Config
 
         @Serializable
-        data class CharDetail(val char: CharacterEntity) : Config
+        data class CharDetail(val characterrId: Int) : Config
 
         @Serializable
         data object Favorites : Config

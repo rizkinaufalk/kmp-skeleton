@@ -1,9 +1,10 @@
 package org.example.kmpskeleton.features.character.favourites
 
-import org.example.kmpskeleton.data.remote.entity.CharacterEntity
+import org.example.kmpskeleton.domain.model.Character
+import org.example.kmpskeleton.domain.util.DataError
 
 data class FavoritesUIState(
-    val characters: List<CharacterEntity> = emptyList(),
+    val characters: List<Character> = emptyList(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: DataError? = null
 )

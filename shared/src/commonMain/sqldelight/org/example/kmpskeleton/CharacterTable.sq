@@ -1,4 +1,4 @@
-CREATE TABLE Character (
+CREATE TABLE CharacterTable (
     id INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     imageUrl TEXT NOT NULL,
@@ -8,21 +8,24 @@ CREATE TABLE Character (
 );
 
 getAllFavourite:
-SELECT * FROM Character;
+SELECT * FROM CharacterTable;
 
 insertCharacter:
-INSERT OR REPLACE INTO Character (
+INSERT OR REPLACE INTO CharacterTable (
     id, name, imageUrl, status, species, gender
 )
 VALUES (?, ?, ?, ?, ?, ?);
 
+getCharacterById:
+SELECT * FROM CharacterTable WHERE id = ?;
+
 isCharacterExists:
 SELECT EXISTS(
-    SELECT 1 FROM Character WHERE id = ?
+    SELECT 1 FROM CharacterTable WHERE id = ?
 ) AS isExists;
 
 removeCharacter:
-DELETE FROM Character WHERE id = ?;
+DELETE FROM CharacterTable WHERE id = ?;
 
 deleteAllCharacters:
-DELETE FROM Character;
+DELETE FROM CharacterTable;

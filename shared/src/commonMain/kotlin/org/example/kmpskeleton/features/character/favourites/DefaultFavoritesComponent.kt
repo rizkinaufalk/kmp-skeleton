@@ -8,22 +8,23 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.example.kmpskeleton.Character
-import org.example.kmpskeleton.data.remote.entity.CharacterEntity
-import org.example.kmpskeleton.domain.subscribers.Resource
+import org.example.kmpskeleton.data.datasources.local.entity.CharacterEntity
+import org.example.kmpskeleton.domain.usecase.CharacterUseCases
 import org.example.kmpskeleton.domain.usecase.GetAllFavCharacterUseCase
-import org.example.kmpskeleton.features.character.CharListUIState
+import org.example.kmpskeleton.domain.util.Result
 
 class DefaultFavoritesComponent(
     componentContext: ComponentContext,
-    private val getAllFavCharacterUseCase: GetAllFavCharacterUseCase,
-    private val charClicked: (CharacterEntity) -> Unit
+    private val characterUseCases: CharacterUseCases,
+    private val charClicked: (id: Int) -> Unit
 ) : FavoritesComponent, ComponentContext by componentContext {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private val _uiState = MutableValue(FavoritesUIState())
     override val uiState: Value<FavoritesUIState> = _uiState
+
+    override fun onCharClicked(id: Int)  = charClicked(id)
 
     private var isLoading = false
     private var currentPage = 1
@@ -40,29 +41,29 @@ class DefaultFavoritesComponent(
         _uiState.value = _uiState.value.copy(isLoading = true)
 
         scope.launch {
-            getAllFavCharacterUseCase().collect { result ->
+            characterUseCases.getAllFavCharacter().collect { result ->
                 _uiState.update { currentState ->
                     when (result) {
-                        is Resource.Failure -> currentState.copy(
+                        is Result.Error -> currentState.copy(
                             isLoading = false,
-                            errorMessage = result.failureData.message
+                            errorMessage = result.error
                         )
-                        Resource.Loading -> currentState.copy(
+
+                        Result.Loading -> currentState.copy(
                             isLoading = true,
                             errorMessage = null
                         )
-                        is Resource.Success -> currentState.copy(
-                            characters = result.data.orEmpty(),
+
+                        is Result.Success -> currentState.copy(
+                            characters = result.data,
                             isLoading = false,
                             errorMessage = null
                         )
                     }
                 }
 
-                isLoading = result is Resource.Loading
+                isLoading = result is Result.Loading
             }
         }
     }
-
-    override fun onCharClicked(data: CharacterEntity) = charClicked(data)
 }

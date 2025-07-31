@@ -1,6 +1,6 @@
 package org.example.kmpskeleton.domain.usecase
 
-import org.example.kmpskeleton.data.remote.entity.CharacterEntity
+import org.example.kmpskeleton.data.datasources.local.entity.CharacterEntity
 import org.example.kmpskeleton.domain.repositories.ICharacterRepo
 
 class ToggleFavCharacterUseCase (
